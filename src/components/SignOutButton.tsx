@@ -5,6 +5,7 @@ export const SignOutButton = () => {
   const { instance } = useMsal();
 
   const handleLogout = () => {
+    sessionStorage.removeItem("calendarData");
     instance.logoutRedirect({
       postLogoutRedirectUri: "/",
     });

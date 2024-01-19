@@ -4,6 +4,7 @@ import { H1, P } from "../styles/styled-components/Text.tsx";
 import { Button, Stack } from "react-bootstrap";
 import { useIsAuthenticated } from "@azure/msal-react";
 import { SignOutButton } from "./SignOutButton.tsx";
+import { Link } from "react-router-dom";
 
 export const SignInPage = () => {
   const isAuthenticated = useIsAuthenticated();
@@ -29,7 +30,7 @@ export const SignInPage = () => {
         ) : (
           <>
             <P>Du är inloggad!</P>
-              <Button variant="primary">Gå till mötesrum</Button>
+              <Link to={"/meetingrooms"}><Button variant="primary">Gå till mötesrum</Button></Link>
               <SignOutButton />
           </>
         )}
