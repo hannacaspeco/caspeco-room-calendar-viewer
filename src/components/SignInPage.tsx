@@ -30,8 +30,10 @@ export const SignInPage = () => {
         ) : (
           <>
             <P>Du är inloggad!</P>
-              <Link to={"/meetingrooms"}><Button variant="primary">Gå till mötesrum</Button></Link>
-              <SignOutButton />
+            <Link to={"/meetingrooms"}>
+              <Button variant="primary">Gå till mötesrum</Button>
+            </Link>
+            <SignOutButton />
           </>
         )}
       </center>

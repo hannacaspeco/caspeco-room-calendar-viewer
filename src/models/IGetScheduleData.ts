@@ -8,10 +8,10 @@ export interface IGetScheduleRequest {
 
 export interface IGetScheduleResponse {
   "@odata.context": string;
-  value: IValue[];
+  value: ISchedule[];
 }
 
-interface IValue {
+export interface ISchedule {
   scheduleId: string;
   availabilityView: string;
   scheduleItems: IScheduleItem[];

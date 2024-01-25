@@ -1,37 +1,60 @@
 import { useMsal } from "@azure/msal-react";
 import { loginRequest } from "../authConfig";
 import { SignOutButton } from "./SignOutButton";
-import { Button } from "react-bootstrap";
-import { getAllRoomsSchedule } from "../services/calendarService";
+import { Container } from "react-bootstrap";
+import { allMeetingRooms, getAllSchedules } from "../services/calendarService";
+import { useEffect, useState } from "react";
+import { MeetingRoomBlock } from "./MeetingRoomBlock";
+import { IGetScheduleResponse } from "../models/IGetScheduleData";
 
 export const MeetingRooms = () => {
   const { instance, accounts } = useMsal();
+  const [calendarSchedules, setCalendarSchedules] =
+    useState<IGetScheduleResponse>();
 
-  const showSchedule = async () => {
-    sessionStorage.removeItem("calendarData");
-    instance
-      .acquireTokenSilent({
-        ...loginRequest,
-        account: accounts[0],
-      })
-      .then((response) => {
-        getAllRoomsSchedule(response.accessToken).then((response) => {
-          sessionStorage.setItem("calendarData", JSON.stringify(response));
-        }
-        );
-      });
-  }
+  useEffect(() => {
+    async function getCalendarSchedules() {
+      if (calendarSchedules) {
+        return;
+      }
 
-  const calendarDataFromStorage = sessionStorage.getItem("calendarData")
+      await instance.initialize();
+      instance
+        .acquireTokenSilent({
+          ...loginRequest,
+          account: accounts[0],
+        })
+        .then((response) => {
+          getAllSchedules(response.accessToken).then((response) => {
+            setCalendarSchedules(response);
+          });
+        })
+        .catch((err) => {
+          console.log("error: ", err);
+        });
+    }
+    getCalendarSchedules();
+  }, [accounts, calendarSchedules, instance]);
 
   return (
-    <>
+    <Container>
       MeetingRooms
       <SignOutButton />
       <hr />
-      <Button onClick={showSchedule}>Visa mötesrummens schema för idag</Button>
-      <p>{calendarDataFromStorage}</p>
-      <hr/>
-    </>
+      {allMeetingRooms
+        .map((roomMail, roomName) => {
+          console.log(roomName);
+
+          return (
+            <MeetingRoomBlock
+              name={roomName}
+              schedule={calendarSchedules?.value.find(
+                (s) => s.scheduleId === roomMail
+              )}
+            />
+          );
+        })
+        .valueSeq()}
+    </Container>
   );
 };
