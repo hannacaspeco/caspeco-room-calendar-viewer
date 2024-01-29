@@ -1,6 +1,8 @@
 import axios from "axios";
-import { IGetScheduleRequest } from "../models/IGetScheduleData";
+import { IGetScheduleRequest, IScheduleItem } from "../models/IGetScheduleData";
 import { Map } from "immutable";
+import dayjs from "dayjs";
+import { RoomStatus } from "../models/RoomStatus";
 
 const BASE_URL = "https://graph.microsoft.com/v1.0";
 
@@ -59,10 +61,7 @@ export const getAllSchedules = async (accessToken: string) => {
     .catch((error) => console.log(error));
 };
 
-export const getSchedule = async (
-  accessToken: string,
-  mail: string
-) => {
+export const getSchedule = async (accessToken: string, mail: string) => {
   const options = {
     method: "POST",
     headers: {
@@ -86,4 +85,35 @@ export const getSchedule = async (
   return axios(BASE_URL + "/me/calendar/getSchedule", options)
     .then((response) => response.data)
     .catch((error) => console.log(error));
+};
+
+export const getRoomStatus = (
+  scheduleItems: IScheduleItem[] | undefined,
+  currentTime: dayjs.Dayjs
+): [status: RoomStatus, time: dayjs.Dayjs | undefined] => {
+  if (!scheduleItems || scheduleItems.length === 0) {
+    return [RoomStatus.available, undefined];
+  }
+
+  const meetingInProgress = scheduleItems.find(
+    (i) =>
+      currentTime.diff(i.start.dateTime) > 0 &&
+      currentTime.diff(i.end.dateTime) < 0
+  );
+
+  if (meetingInProgress) {
+    console.log("meet ", meetingInProgress.end.dateTime);
+
+    return [RoomStatus.unavailable, dayjs(meetingInProgress.end.dateTime)];
+  }
+
+  const nextMeeting = scheduleItems.find(
+    (i) => currentTime.diff(i.start.dateTime) < 0
+  );
+
+  if (nextMeeting) {
+    return [RoomStatus.soonUnavailable, dayjs(nextMeeting.start.dateTime)];
+  }
+
+  return [RoomStatus.available, undefined];
 };

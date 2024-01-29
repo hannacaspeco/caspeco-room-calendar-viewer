@@ -1,10 +1,9 @@
 export interface IGetScheduleRequest {
-    schedules: string[];
-    startTime: ITime;
-    endTime: ITime;
-    availabilityViewInterval: number;
-  }
-  
+  schedules: string[];
+  startTime: ITime;
+  endTime: ITime;
+  availabilityViewInterval: number;
+}
 
 export interface IGetScheduleResponse {
   "@odata.context": string;
@@ -18,7 +17,7 @@ export interface ISchedule {
   workingHours: IWorkingHours;
 }
 
-interface IScheduleItem {
+export interface IScheduleItem {
   isPrivate: boolean;
   status: string;
   subject: string;

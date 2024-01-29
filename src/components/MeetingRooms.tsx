@@ -43,8 +43,6 @@ export const MeetingRooms = () => {
       <hr />
       {allMeetingRooms
         .map((roomMail, roomName) => {
-          console.log(roomName);
-
           return (
             <MeetingRoomBlock
               name={roomName}
