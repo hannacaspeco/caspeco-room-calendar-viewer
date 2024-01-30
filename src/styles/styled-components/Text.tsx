@@ -12,7 +12,6 @@ export const H2 = styled.h2`
   font-family: "Inter", sans-serif;
   font-size: 32px;
   font-weight: 300;
-  color: #fff;
 `;
 
 export const H3 = styled.h3`

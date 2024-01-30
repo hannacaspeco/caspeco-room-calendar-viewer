@@ -7,13 +7,11 @@ import { RoomStatus } from "../models/RoomStatus";
 
 interface IMeetingRoomBlockProps {
   name: string;
+  mail: string;
   schedule: ISchedule | undefined;
 }
 
 export const MeetingRoomBlock = (props: IMeetingRoomBlockProps) => {
-  // days.js format: 2020-04-02T08:02:17-05:00
-  //from API:        2024-01-26T08:15:00.0000000
-
   if (!props.schedule) {
     return;
   }
@@ -21,8 +19,6 @@ export const MeetingRoomBlock = (props: IMeetingRoomBlockProps) => {
   const now = dayjs();
 
   const [status, time] = getRoomStatus(props.schedule?.scheduleItems, now);
-  console.log("time ", time);
-  console.log("dayjs ", dayjs());
 
   let avaliabilityBgColor;
   let roomStatusMsg;
@@ -47,28 +43,30 @@ export const MeetingRoomBlock = (props: IMeetingRoomBlockProps) => {
   }
 
   return (
-    // <Link to={"/meetingroom/" + props.name}>
-    <Card
-      bg={avaliabilityBgColor}
-      border={avaliabilityBgColor}
-      key={props.name}
-      text="dark" // dark el white
-      style={{
-        width: "350px",
-        //  height: "90px"
-      }}
-      className="mb-2 text-center"
+    <Link
+      to={"/meetingroom/" + props.name}
+      state={{ mail: props.mail, name: props.name }}
+      style={{ textDecoration: "none" }}
     >
-      <Card.Body>
-        <Card.Title>{props.name}</Card.Title>
-        <Card.Text>
-          {/* {JSON.stringify(props.schedule?.scheduleItems)} */}
-          {/* <hr /> */}
-          {roomStatusMsg}
-          {time ? <strong>{time.format("HH:mm")}</strong> : "resten av dagen"}
-        </Card.Text>
-      </Card.Body>
-    </Card>
-    // </Link>
+      <Card
+        bg={avaliabilityBgColor}
+        border={avaliabilityBgColor}
+        key={props.name}
+        text="dark" // dark el white
+        style={{
+          width: "350px",
+          //  height: "90px"
+        }}
+        className="mb-2 text-center"
+      >
+        <Card.Body>
+          <Card.Title>{props.name}</Card.Title>
+          <Card.Text>
+            {roomStatusMsg}
+            {time ? <strong>{time.format("HH:mm")}</strong> : "resten av dagen"}
+          </Card.Text>
+        </Card.Body>
+      </Card>
+    </Link>
   );
 };

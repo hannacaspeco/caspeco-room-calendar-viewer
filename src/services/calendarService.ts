@@ -20,7 +20,7 @@ export const allMeetingRooms = Map<string, string>([
   [ "Dag Hammarskjöld", "room.daghammarskjold@caspeco.se" ],
   [ "E-type", "room.etype@caspeco.se" ],
   [ "Gunnar Leche", "room.gunnar.leche@caspeco.se" ],
-  [ "Ingemar Bergmar", "ingemarbergman@caspeco.se" ],
+  [ "Ingemar Bergman", "ingemarbergman@caspeco.se" ],
   [ "Karin Boye", "room.karinboye@caspeco.se" ],
   [ "Köket", "room.koket@caspeco.se" ],
   [ "Magdalena Andersson", "room.magdalenaandersson@caspeco.se" ],
@@ -102,8 +102,6 @@ export const getRoomStatus = (
   );
 
   if (meetingInProgress) {
-    console.log("meet ", meetingInProgress.end.dateTime);
-
     return [RoomStatus.unavailable, dayjs(meetingInProgress.end.dateTime)];
   }
 

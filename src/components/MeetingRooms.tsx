@@ -46,6 +46,7 @@ export const MeetingRooms = () => {
           return (
             <MeetingRoomBlock
               name={roomName}
+              mail={roomMail}
               schedule={calendarSchedules?.value.find(
                 (s) => s.scheduleId === roomMail
               )}
