@@ -7,17 +7,15 @@ import { loginRequest } from "../authConfig";
 import { IGetScheduleResponse } from "../models/IGetScheduleData";
 import { getSchedule } from "../services/calendarService";
 import dayjs from "dayjs";
-import { Button } from "react-bootstrap";
+import { Button, Col, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { SignOutButton } from "./SignOutButton";
 
 export const SingleRoomSchedule = () => {
   const [calendarSchedule, setCalendarSchedule] =
     useState<IGetScheduleResponse>();
   const data = useLocation();
   const { instance, accounts } = useMsal();
-  const todaysDate = dayjs(
-    calendarSchedule?.value[0].scheduleItems[0].start.dateTime
-  ).format("dddd D MMMM");
 
   useEffect(() => {
     async function getCalendarSchedule() {
@@ -45,28 +43,45 @@ export const SingleRoomSchedule = () => {
     getCalendarSchedule();
   }, [accounts, calendarSchedule, data.state.mail, instance]);
 
-  if (!calendarSchedule) {
+  console.log("cal sched_ ", calendarSchedule);
+  
+
+  if (!calendarSchedule) {   
     return <></>;
   }
 
   return (
-    <>
-      <Link to={"/meetingrooms"}>
-        <Button>Gå tillbaka</Button>
-      </Link>
-      <H2>MÖTESRUM</H2>
-      <H1>{data.state.name}</H1>
+    <div className="p-2">
+      <Row className="ps-2 pe-2">
+        <Col className="text-start p-4">
+          <Link to={"/meetingrooms"}>
+            <Button>Gå tillbaka</Button>
+          </Link>
+        </Col>
+        <Col className="text-end p-4">
+          <SignOutButton />
+        </Col>
+      </Row>
+
+      <div className="text-center" style={{ color: "#4472C4" }}>
+        <H2>SCHEMA</H2>
+        <H1>{data.state.name}</H1>
+      </div>
+      <P>{dayjs().format("dddd D MMMM")}</P>
       <hr />
-      <P>{todaysDate}</P>
-      {calendarSchedule.value[0].scheduleItems.map((i) => {
-        return (
-          <SingleRoomScheduleBlock
-            start={dayjs(i.start.dateTime).format("HH:mm")}
-            end={dayjs(i.end.dateTime).format("HH:mm")}
-            name={i.location}
-          />
-        );
-      })}
-    </>
+      <div>
+        
+        {calendarSchedule.value[0].scheduleItems.map((i) => {
+          return (
+            <SingleRoomScheduleBlock
+              start={dayjs(i.start.dateTime).format("HH:mm")}
+              end={dayjs(i.end.dateTime).format("HH:mm")}
+              name={i.location}
+              booker={i.subject}
+            />
+          );
+        })}
+      </div>
+    </div>
   );
 };

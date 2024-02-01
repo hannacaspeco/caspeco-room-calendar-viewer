@@ -1,9 +1,10 @@
-import { Card } from "react-bootstrap";
 import { ISchedule } from "../models/IGetScheduleData";
 import { Link } from "react-router-dom";
 import { getRoomStatus } from "../services/calendarService";
 import dayjs from "dayjs";
 import { RoomStatus } from "../models/RoomStatus";
+import { H3 } from "../styles/styled-components/Text";
+import { Card } from "../styles/styled-components/Card";
 
 interface IMeetingRoomBlockProps {
   name: string;
@@ -25,19 +26,19 @@ export const MeetingRoomBlock = (props: IMeetingRoomBlockProps) => {
 
   switch (status) {
     case RoomStatus.available:
-      avaliabilityBgColor = "success";
+      avaliabilityBgColor = "linear-gradient(45deg,#17961b,#3cc740)";
       roomStatusMsg = "Ledig ";
       break;
     case RoomStatus.unavailable:
-      avaliabilityBgColor = "danger";
+      avaliabilityBgColor = "linear-gradient(45deg,#910106,#e0383e)";
       roomStatusMsg = "Upptagen tills ";
       break;
     case RoomStatus.soonUnavailable:
-      avaliabilityBgColor = "warning";
+      avaliabilityBgColor = "linear-gradient(45deg,#db8202,#f5b65b)";
       roomStatusMsg = "Upptagen ";
       break;
     default:
-      avaliabilityBgColor = "info";
+      avaliabilityBgColor = "linear-gradient(45deg,#4099ff,#73b4ff)";
       roomStatusMsg = "error";
       break;
   }
@@ -48,24 +49,10 @@ export const MeetingRoomBlock = (props: IMeetingRoomBlockProps) => {
       state={{ mail: props.mail, name: props.name }}
       style={{ textDecoration: "none" }}
     >
-      <Card
-        bg={avaliabilityBgColor}
-        border={avaliabilityBgColor}
-        key={props.name}
-        text="dark" // dark el white
-        style={{
-          width: "350px",
-          //  height: "90px"
-        }}
-        className="mb-2 text-center"
-      >
-        <Card.Body>
-          <Card.Title>{props.name}</Card.Title>
-          <Card.Text>
-            {roomStatusMsg}
-            {time ? <strong>{time.format("HH:mm")}</strong> : "resten av dagen"}
-          </Card.Text>
-        </Card.Body>
+      <Card $inputColor={avaliabilityBgColor}>
+        <H3>{props.name}</H3>
+        {roomStatusMsg}
+        {time ? <strong>{time.format("HH:mm")}</strong> : "resten av dagen"}
       </Card>
     </Link>
   );
