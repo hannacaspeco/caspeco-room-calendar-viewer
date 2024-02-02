@@ -21,6 +21,7 @@ export const MeetingRooms = () => {
       }
 
       await instance.initialize();
+      await instance.handleRedirectPromise();
       instance
         .acquireTokenSilent({
           ...loginRequest,
