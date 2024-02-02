@@ -1,6 +1,5 @@
 import { useLocation } from "react-router";
 import { H1, H2, P } from "../styles/styled-components/Text";
-import { SingleRoomScheduleBlock } from "./SingleRoomScheduleBlock";
 import { useMsal } from "@azure/msal-react";
 import { useState, useEffect } from "react";
 import { loginRequest } from "../authConfig";
@@ -10,6 +9,7 @@ import dayjs from "dayjs";
 import { Button, Col, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { SignOutButton } from "./SignOutButton";
+import { DayCalendar } from "./DayCalendar";
 
 export const SingleRoomSchedule = () => {
   const [calendarSchedule, setCalendarSchedule] =
@@ -43,12 +43,11 @@ export const SingleRoomSchedule = () => {
     getCalendarSchedule();
   }, [accounts, calendarSchedule, data.state.mail, instance]);
 
-  console.log("cal sched_ ", calendarSchedule);
-  
-
-  if (!calendarSchedule) {   
+  if (!calendarSchedule) {
     return <></>;
   }
+
+  const today = dayjs();
 
   return (
     <div className="p-2">
@@ -67,20 +66,13 @@ export const SingleRoomSchedule = () => {
         <H2>SCHEMA</H2>
         <H1>{data.state.name}</H1>
       </div>
-      <P>{dayjs().format("dddd D MMMM")}</P>
+      <P>{today.format("dddd D MMMM")}</P>
       <hr />
       <div>
-        
-        {calendarSchedule.value[0].scheduleItems.map((i) => {
-          return (
-            <SingleRoomScheduleBlock
-              start={dayjs(i.start.dateTime).format("HH:mm")}
-              end={dayjs(i.end.dateTime).format("HH:mm")}
-              name={i.location}
-              booker={i.subject}
-            />
-          );
-        })}
+        <DayCalendar
+          scheduleItems={calendarSchedule.value[0].scheduleItems}
+          today={today}
+        />
       </div>
     </div>
   );
