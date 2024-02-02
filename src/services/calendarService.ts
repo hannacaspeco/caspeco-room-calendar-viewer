@@ -7,26 +7,26 @@ import { RoomStatus } from "../models/RoomStatus";
 const BASE_URL = "https://graph.microsoft.com/v1.0";
 
 export const allMeetingRooms = Map<string, string>([
-  [ "Allrummet", "allrummet@caspeco.se" ],
-  [ "Alva Myrdal", "room.alvamyrdal@caspeco.se" ],
-  [ "Anders Celsius", "room.anderscelsius@caspeco.se" ],
-  [ "Anna Maria Lenngren", "annamarialenngren@caspeco.se" ],
-  [ "Armand Duplantis", "room.armandduplantis@caspeco.se" ],
-  [ "Barbro Alving", "barbroalving@caspeco.se" ],
-  [ "Baren", "room.baren@caspeco.se" ],
-  [ "Bror Hjorth", "brorhjorth@caspeco.se" ],
-  [ "Bruno Liljefors", "room.brunoliljefors@caspeco.se" ],
-  [ "Carl Von Linné", "carlvonlinne@caspeco.se" ],
-  [ "Dag Hammarskjöld", "room.daghammarskjold@caspeco.se" ],
-  [ "E-type", "room.etype@caspeco.se" ],
-  [ "Gunnar Leche", "room.gunnar.leche@caspeco.se" ],
-  [ "Ingemar Bergman", "ingemarbergman@caspeco.se" ],
-  [ "Karin Boye", "room.karinboye@caspeco.se" ],
-  [ "Köket", "room.koket@caspeco.se" ],
-  [ "Magdalena Andersson", "room.magdalenaandersson@caspeco.se" ],
-  [ "Musikrummet", "room.musikrummet@caspeco.se" ],
-  [ "Owe Thörnqvist", "owethornqvist@caspeco.se" ],
-  [ "Veronica Maggio", "veronicamaggio@caspeco.se" ],
+  ["Allrummet", "allrummet@caspeco.se"],
+  ["Alva Myrdal", "room.alvamyrdal@caspeco.se"],
+  ["Anders Celsius", "room.anderscelsius@caspeco.se"],
+  ["Anna Maria Lenngren", "annamarialenngren@caspeco.se"],
+  ["Armand Duplantis", "room.armandduplantis@caspeco.se"],
+  ["Barbro Alving", "barbroalving@caspeco.se"],
+  ["Baren", "room.baren@caspeco.se"],
+  ["Bror Hjorth", "brorhjorth@caspeco.se"],
+  ["Bruno Liljefors", "room.brunoliljefors@caspeco.se"],
+  ["Carl Von Linné", "carlvonlinne@caspeco.se"],
+  ["Dag Hammarskjöld", "room.daghammarskjold@caspeco.se"],
+  ["E-type", "room.etype@caspeco.se"],
+  ["Gunnar Leche", "room.gunnar.leche@caspeco.se"],
+  ["Ingemar Bergman", "ingemarbergman@caspeco.se"],
+  ["Karin Boye", "room.karinboye@caspeco.se"],
+  ["Köket", "room.koket@caspeco.se"],
+  ["Magdalena Andersson", "room.magdalenaandersson@caspeco.se"],
+  ["Musikrummet", "room.musikrummet@caspeco.se"],
+  ["Owe Thörnqvist", "owethornqvist@caspeco.se"],
+  ["Veronica Maggio", "veronicamaggio@caspeco.se"],
 ]);
 
 const now = new Date();
@@ -114,4 +114,17 @@ export const getRoomStatus = (
   }
 
   return [RoomStatus.available, undefined];
+};
+
+export const convertUTCDateToLocalDate = (date: Date) => {
+  const newDate = new Date(
+    date.getTime() + date.getTimezoneOffset() * 60 * 1000
+  );
+
+  const offset = date.getTimezoneOffset() / 60;
+  const hours = date.getHours();
+
+  newDate.setHours(hours - offset);
+
+  return newDate;
 };
