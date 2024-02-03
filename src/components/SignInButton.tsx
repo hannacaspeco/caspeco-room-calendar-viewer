@@ -7,9 +7,12 @@ export const SignInButton = () => {
 
   const handleLogin = async () => {
     await instance.handleRedirectPromise();
-    instance.loginRedirect(loginRequest).catch((e) => {
-      console.log(e);
-    });
+    const accounts = instance.getAllAccounts();
+    if (accounts.length === 0) {
+      await instance.loginRedirect(loginRequest).catch((e) => {
+        throw e;
+      });;
+    }
   };
 
   return (

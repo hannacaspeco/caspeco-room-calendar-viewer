@@ -57,7 +57,7 @@ export const MeetingRooms = () => {
 
       {mapView ? (
         <>
-        <Image src="/karta_over_kontoret.png" width="400"/>
+        <Image src="/caspeco-room-calendar-viewer/karta_over_kontoret.png" width="400"/>
         </>
       ) : (
         <Row className="justify-content-md-center px-3">
@@ -78,7 +78,7 @@ export const MeetingRooms = () => {
               .valueSeq()}
           </Col>
           <Col className="officeMap">
-            <Image src="/karta_over_kontoret.png" width="900" alt="text"/>
+            <Image src="/caspeco-room-calendar-viewer/karta_over_kontoret.png" width="900" alt="text"/>
           </Col>
         </Row>
       )}

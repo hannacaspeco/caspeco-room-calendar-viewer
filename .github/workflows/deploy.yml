@@ -3,8 +3,13 @@ name: Deploy
 on:
   push:
     branches:
-      - deploy-test
       - main
+
+env: 
+  VITE_APP_CLIENT_ID: ${{ secrets.VITE_APP_CLIENT_ID }}
+  VITE_APP_TENANT_ID: ${{ secrets.VITE_APP_TENANT_ID }}
+  VITE_APP_REDIRECT_URI: ${{ secrets.VITE_APP_REDIRECT_URI }}
+  VITE_OPEN_AI_KEY: ${{ secrets.VITE_OPEN_AI_KEY }}
 
 jobs:
   build:
