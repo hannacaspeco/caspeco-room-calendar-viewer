@@ -2,21 +2,19 @@
 import { Calendar, DateLocalizer, dayjsLocalizer } from "react-big-calendar";
 import dayjs from "dayjs";
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import { IScheduleItem } from "../models/IGetScheduleData";
-import { convertUTCDateToLocalDate } from "../services/calendarService";
+import { ScheduleItem } from "../models/Schedule";
 
 const localizer = dayjsLocalizer(dayjs);
 const formats = {
   timeGutterFormat: "HH:mm",
   eventTimeRangeFormat: (
     range: { start: Date; end: Date },
-    culture: string | undefined,
+    _culture: string | undefined,
     localizer: DateLocalizer | undefined
   ) => {
     if (!localizer) {
       return "error";
     }
-    console.log(culture);
     
     return (
       localizer.format(range.start, "HH:mm") +
@@ -27,35 +25,35 @@ const formats = {
 };
 
 interface IDayCalendarProps {
-  scheduleItems: IScheduleItem[];
-  today: dayjs.Dayjs;
+  scheduleItems: ScheduleItem[];
+  day: dayjs.Dayjs;
 }
 
-export const DayCalendar = (props: IDayCalendarProps) => {
+export const DayCalendar = (props: IDayCalendarProps) => {   
   const events = props.scheduleItems.map((i) => {
     return {
-      start: convertUTCDateToLocalDate(dayjs(i.start.dateTime).toDate()),
-      end: convertUTCDateToLocalDate(dayjs(i.end.dateTime).toDate()),
+      start: i.start.dateTime.toDate(),
+      end: i.end.dateTime.toDate(),
       title: i.subject,
     };
-  });
+  });  
 
   return (
     <Calendar
       culture="sv-SE"
       formats={formats}
       min={
-        new Date(props.today.year(), props.today.month(), props.today.date(), 7)
+        new Date(props.day.year(), props.day.month(), props.day.date(), 7)
       }
       max={
         new Date(
-          props.today.year(),
-          props.today.month(),
-          props.today.date(),
+          props.day.year(),
+          props.day.month(),
+          props.day.date(),
           21
         )
       }
-      defaultDate={props.today.toDate()}
+      defaultDate={props.day.toDate()}
       defaultView="day"
       views={["day"]}
       toolbar={false}

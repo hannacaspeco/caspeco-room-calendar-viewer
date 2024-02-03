@@ -35,13 +35,13 @@ export interface ITime {
   timeZone: string;
 }
 
-interface IWorkingHours {
+export interface IWorkingHours {
   daysOfWeek: string[];
   startTime: string;
   endTime: string;
   timeZone: ITimeZone;
 }
 
-interface ITimeZone {
+export interface ITimeZone {
   name: string;
 }

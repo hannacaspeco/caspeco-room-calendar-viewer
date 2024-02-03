@@ -6,12 +6,17 @@ import { Button, Col, Container, Row, Image } from "react-bootstrap";
 import { allMeetingRooms, getAllSchedules } from "../services/calendarService";
 import { useEffect, useState } from "react";
 import { MeetingRoomBlock } from "./MeetingRoomBlock";
-import { IGetScheduleResponse } from "../models/IGetScheduleData";
+import { Schedule } from "../models/Schedule";
+import timezone from 'dayjs/plugin/timezone'
+import utc from 'dayjs/plugin/utc'
+import dayjs from "dayjs";
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 export const MeetingRooms = () => {
   const { instance, accounts } = useMsal();
-  const [calendarSchedules, setCalendarSchedules] =
-    useState<IGetScheduleResponse>();
+  const [calendarSchedules, setCalendarSchedules] = useState<Schedule[]>();
   const [mapView, setMapView] = useState<boolean>(false);
 
   useEffect(() => {
@@ -64,7 +69,7 @@ export const MeetingRooms = () => {
                   <MeetingRoomBlock
                     name={roomName}
                     mail={roomMail}
-                    schedule={calendarSchedules?.value.find(
+                    schedule={calendarSchedules?.find(
                       (s) => s.scheduleId === roomMail
                     )}
                   />

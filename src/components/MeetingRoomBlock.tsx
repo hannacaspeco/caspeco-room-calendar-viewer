@@ -1,15 +1,15 @@
-import { ISchedule } from "../models/IGetScheduleData";
 import { Link } from "react-router-dom";
 import { getRoomStatus } from "../services/calendarService";
 import dayjs from "dayjs";
 import { RoomStatus } from "../models/RoomStatus";
 import { H3 } from "../styles/styled-components/Text";
 import { Card } from "../styles/styled-components/Card";
+import { Schedule } from "../models/Schedule";
 
 interface IMeetingRoomBlockProps {
   name: string;
   mail: string;
-  schedule: ISchedule | undefined;
+  schedule: Schedule | undefined;
 }
 
 export const MeetingRoomBlock = (props: IMeetingRoomBlockProps) => {
@@ -17,8 +17,7 @@ export const MeetingRoomBlock = (props: IMeetingRoomBlockProps) => {
     return;
   }
 
-  const now = dayjs();
-
+  const now = dayjs("2024-02-02");
   const [status, time] = getRoomStatus(props.schedule?.scheduleItems, now);
 
   let avaliabilityBgColor;
@@ -52,7 +51,7 @@ export const MeetingRoomBlock = (props: IMeetingRoomBlockProps) => {
       <Card $inputColor={avaliabilityBgColor}>
         <H3>{props.name}</H3>
         {roomStatusMsg}
-        {time ? <strong>{time.format("HH:mm")}</strong> : "resten av dagen"}
+        {time ? <strong>{time.tz().format("HH:mm")}</strong> : "resten av dagen"}
       </Card>
     </Link>
   );

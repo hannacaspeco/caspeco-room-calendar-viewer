@@ -3,23 +3,22 @@ import { H1, H2, P } from "../styles/styled-components/Text";
 import { useMsal } from "@azure/msal-react";
 import { useState, useEffect } from "react";
 import { loginRequest } from "../authConfig";
-import { IGetScheduleResponse } from "../models/IGetScheduleData";
 import { getSchedule } from "../services/calendarService";
-import dayjs from "dayjs";
 import { Button, Col, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { SignOutButton } from "./SignOutButton";
 import { DayCalendar } from "./DayCalendar";
+import { Schedule } from "../models/Schedule";
 
 export const SingleRoomSchedule = () => {
-  const [calendarSchedule, setCalendarSchedule] =
-    useState<IGetScheduleResponse>();
+  const [schedule, setSchedule] =
+    useState<Schedule>();
   const data = useLocation();
   const { instance, accounts } = useMsal();
 
   useEffect(() => {
-    async function getCalendarSchedule() {
-      if (calendarSchedule) {
+    async function effectAsync() {
+      if (schedule) {
         return;
       }
 
@@ -32,7 +31,7 @@ export const SingleRoomSchedule = () => {
         .then((response) => {
           getSchedule(response.accessToken, data.state.mail).then(
             (response) => {
-              setCalendarSchedule(response);
+              setSchedule(response);
             }
           );
         })
@@ -40,14 +39,12 @@ export const SingleRoomSchedule = () => {
           console.log("error: ", err);
         });
     }
-    getCalendarSchedule();
-  }, [accounts, calendarSchedule, data.state.mail, instance]);
+    effectAsync();
+  }, [accounts, schedule, data.state.mail, instance]);
 
-  if (!calendarSchedule) {
+  if (!schedule) {
     return <></>;
   }
-
-  const today = dayjs();
 
   return (
     <div className="p-2">
@@ -66,12 +63,12 @@ export const SingleRoomSchedule = () => {
         <H2>SCHEMA</H2>
         <H1>{data.state.name}</H1>
       </div>
-      <P>{today.format("dddd D MMMM")}</P>
+      <P>{schedule.day.format("dddd D MMMM")}</P>
       <hr />
       <div>
         <DayCalendar
-          scheduleItems={calendarSchedule.value[0].scheduleItems}
-          today={today}
+          scheduleItems={schedule.scheduleItems}
+          day={schedule.day}
         />
       </div>
     </div>

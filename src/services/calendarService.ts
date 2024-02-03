@@ -1,8 +1,13 @@
-import axios from "axios";
-import { IGetScheduleRequest, IScheduleItem } from "../models/IGetScheduleData";
+import axios, { AxiosResponse } from "axios";
+import {
+  IGetScheduleRequest,
+  IGetScheduleResponse,
+} from "../models/IGetScheduleData";
 import { Map } from "immutable";
 import dayjs from "dayjs";
 import { RoomStatus } from "../models/RoomStatus";
+import { Schedule, ScheduleItem } from "../models/Schedule";
+import { mapToSchedule, mapToSchedules } from "../mappers/scheduleMapper";
 
 const BASE_URL = "https://graph.microsoft.com/v1.0";
 
@@ -29,14 +34,12 @@ export const allMeetingRooms = Map<string, string>([
   ["Veronica Maggio", "veronicamaggio@caspeco.se"],
 ]);
 
-const now = new Date();
-const dd = String(now.getDate()).padStart(2, "0");
-const mm = String(now.getMonth() + 1).padStart(2, "0");
-const yyyy = now.getFullYear();
-const todaysDate = yyyy + "-" + mm + "-" + dd;
+export const getAllSchedules = async (
+  accessToken: string
+): Promise<Schedule[]> => {
+  const today = dayjs().date(2).hour(0).minute(0).second(0).millisecond(0);  
 
-export const getAllSchedules = async (accessToken: string) => {
-  const options = {
+  const requestData = {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -44,25 +47,35 @@ export const getAllSchedules = async (accessToken: string) => {
     },
     data: {
       schedules: [...allMeetingRooms.values()],
+      // schedules: ["ingemarbergman@caspeco.se"],
       startTime: {
-        dateTime: todaysDate + "T06:00:00",
+        dateTime: today.hour(6).format("YYYY-MM-DDTHH:mm:ss"),
         timeZone: "UTC",
       },
       endTime: {
-        dateTime: todaysDate + "T22:00:00",
+        dateTime: today.hour(22).format("YYYY-MM-DDTHH:mm:ss"),
         timeZone: "UTC",
       },
       availabilityViewInterval: 60,
     } as IGetScheduleRequest,
   };
 
-  return axios(BASE_URL + "/me/calendar/getSchedule", options)
-    .then((response) => response.data)
-    .catch((error) => console.log(error));
+  return axios(BASE_URL + "/me/calendar/getSchedule", requestData)
+    .then((response: AxiosResponse<IGetScheduleResponse>) =>
+      mapToSchedules(response.data.value, dayjs(today))
+    )
+    .catch((error) => {
+      throw error;
+    });
 };
 
-export const getSchedule = async (accessToken: string, mail: string) => {
-  const options = {
+export const getSchedule = async (
+  accessToken: string,
+  mail: string
+): Promise<Schedule> => {
+  const today = dayjs().date(2).hour(0).minute(0).second(0).millisecond(0);  
+
+  const requestData = {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -71,24 +84,28 @@ export const getSchedule = async (accessToken: string, mail: string) => {
     data: {
       schedules: [mail],
       startTime: {
-        dateTime: todaysDate + "T06:00:00",
+        dateTime: today.hour(6).format("YYYY-MM-DDTHH:mm:ss"),
         timeZone: "UTC",
       },
       endTime: {
-        dateTime: todaysDate + "T22:00:00",
+        dateTime: today.hour(22).format("YYYY-MM-DDTHH:mm:ss"),
         timeZone: "UTC",
       },
       availabilityViewInterval: 60,
     },
   };
 
-  return axios(BASE_URL + "/me/calendar/getSchedule", options)
-    .then((response) => response.data)
-    .catch((error) => console.log(error));
+  return axios(BASE_URL + "/me/calendar/getSchedule", requestData)
+    .then((response) =>
+      mapToSchedule(response.data.value[0], dayjs(today))
+    )
+    .catch((error) => {
+      throw error;
+    });
 };
 
 export const getRoomStatus = (
-  scheduleItems: IScheduleItem[] | undefined,
+  scheduleItems: ScheduleItem[] | undefined,
   currentTime: dayjs.Dayjs
 ): [status: RoomStatus, time: dayjs.Dayjs | undefined] => {
   if (!scheduleItems || scheduleItems.length === 0) {
@@ -102,29 +119,16 @@ export const getRoomStatus = (
   );
 
   if (meetingInProgress) {
-    return [RoomStatus.unavailable, dayjs(meetingInProgress.end.dateTime)];
+    return [RoomStatus.unavailable, meetingInProgress.end.dateTime];
   }
 
   const nextMeeting = scheduleItems.find(
     (i) => currentTime.diff(i.start.dateTime) < 0
   );
 
-  if (nextMeeting) {
-    return [RoomStatus.soonUnavailable, dayjs(nextMeeting.start.dateTime)];
+  if (nextMeeting) {   
+    return [RoomStatus.soonUnavailable, nextMeeting.start.dateTime];
   }
 
   return [RoomStatus.available, undefined];
-};
-
-export const convertUTCDateToLocalDate = (date: Date) => {
-  const newDate = new Date(
-    date.getTime() + date.getTimezoneOffset() * 60 * 1000
-  );
-
-  const offset = date.getTimezoneOffset() / 60;
-  const hours = date.getHours();
-
-  newDate.setHours(hours - offset);
-
-  return newDate;
 };
