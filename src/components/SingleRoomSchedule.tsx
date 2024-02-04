@@ -4,15 +4,14 @@ import { useMsal } from "@azure/msal-react";
 import { useState, useEffect } from "react";
 import { loginRequest } from "../authConfig";
 import { getSchedule } from "../services/calendarService";
-import { Button, Col, Row } from "react-bootstrap";
+import { Button, ButtonGroup, Col, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { SignOutButton } from "./SignOutButton";
 import { DayCalendar } from "./DayCalendar";
 import { Schedule } from "../models/Schedule";
 
 export const SingleRoomSchedule = () => {
-  const [schedule, setSchedule] =
-    useState<Schedule>();
+  const [schedule, setSchedule] = useState<Schedule>();
   const data = useLocation();
   const { instance, accounts } = useMsal();
 
@@ -49,13 +48,13 @@ export const SingleRoomSchedule = () => {
   return (
     <div className="p-2">
       <Row className="ps-2 pe-2">
-        <Col className="text-start p-4">
-          <Link to={"/meetingrooms"}>
-            <Button>Gå tillbaka</Button>
-          </Link>
-        </Col>
         <Col className="text-end p-4">
-          <SignOutButton />
+          <ButtonGroup>
+            <Link to={"/meetingrooms"}>
+              <Button variant="secondary">Gå tillbaka</Button>
+            </Link>
+            <SignOutButton />
+          </ButtonGroup>
         </Col>
       </Row>
 
