@@ -11,7 +11,7 @@ export const SignInButton = () => {
     if (accounts.length === 0) {
       await instance.loginRedirect(loginRequest).catch((e) => {
         throw e;
-      });;
+      });
     }
   };
 

@@ -10,6 +10,7 @@ import {
   Image,
   ButtonGroup,
   Modal,
+  Spinner,
 } from "react-bootstrap";
 import { allMeetingRooms, getAllSchedules } from "../services/calendarService";
 import { useEffect, useState } from "react";
@@ -79,20 +80,37 @@ export const MeetingRooms = () => {
 
       <Row className="justify-content-md-center px-3">
         <Col>
-          {allMeetingRooms
-            .sort()
-            .map((roomMail, roomName) => {
-              return (
-                <MeetingRoomBlock
-                  name={roomName}
-                  mail={roomMail}
-                  schedule={calendarSchedules?.find(
-                    (s) => s.scheduleId === roomMail
-                  )}
-                />
-              );
-            })
-            .valueSeq()}
+          {calendarSchedules ? (
+            <>
+              {allMeetingRooms
+                .sort()
+                .map((roomMail, roomName) => {
+                  return (
+                    <MeetingRoomBlock
+                      name={roomName}
+                      mail={roomMail}
+                      schedule={calendarSchedules?.find(
+                        (s) => s.scheduleId === roomMail
+                      )}
+                    />
+                  );
+                })
+                .valueSeq()}
+            </>
+          ) : (
+            <Spinner
+              animation="border"
+              role="status"
+              className="p-4"
+              style={{
+                position: "fixed",
+                left: "45%",
+                top: "30%",
+              }}
+            >
+              <span className="visually-hidden">Loading...</span>
+            </Spinner>
+          )}
         </Col>
       </Row>
     </Container>
