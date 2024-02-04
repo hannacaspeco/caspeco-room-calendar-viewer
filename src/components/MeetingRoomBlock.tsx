@@ -1,15 +1,14 @@
 import { Link } from "react-router-dom";
-import { getRoomStatus } from "../services/calendarService";
-import dayjs from "dayjs";
-import { RoomStatus } from "../models/RoomStatus";
 import { H3 } from "../styles/styled-components/Text";
 import { Card } from "../styles/styled-components/Card";
 import { Schedule } from "../models/Schedule";
+import { RoomStatus } from "../models/RoomStatus";
+import dayjs from "dayjs";
 
 interface IMeetingRoomBlockProps {
-  name: string;
-  mail: string;
   schedule: Schedule | undefined;
+  status: RoomStatus;
+  time: dayjs.Dayjs | undefined;
 }
 
 export const MeetingRoomBlock = (props: IMeetingRoomBlockProps) => {
@@ -17,13 +16,10 @@ export const MeetingRoomBlock = (props: IMeetingRoomBlockProps) => {
     return;
   }
 
-  const now = dayjs("2024-02-02");
-  const [status, time] = getRoomStatus(props.schedule?.scheduleItems, now);
+  let avaliabilityBgColor: string;
+  let roomStatusMsg: string;
 
-  let avaliabilityBgColor;
-  let roomStatusMsg;
-
-  switch (status) {
+  switch (props.status) {
     case RoomStatus.available:
       avaliabilityBgColor = "linear-gradient(45deg,#17961b,#3cc740)";
       roomStatusMsg = "Ledig ";
@@ -38,20 +34,20 @@ export const MeetingRoomBlock = (props: IMeetingRoomBlockProps) => {
       break;
     default:
       avaliabilityBgColor = "linear-gradient(45deg,#4099ff,#73b4ff)";
-      roomStatusMsg = "error";
+      roomStatusMsg = "error ";
       break;
   }
 
   return (
     <Link
-      to={"/meetingroom/" + props.name}
-      state={{ mail: props.mail, name: props.name }}
+      to={"/meetingroom/" + props.schedule.scheduleId}
+      state={{ mail: props.schedule.scheduleId, name: props.schedule.name }}
       style={{ textDecoration: "none" }}
     >
       <Card $inputColor={avaliabilityBgColor}>
-        <H3>{props.name}</H3>
+        <H3>{props.schedule.name}</H3>
         {roomStatusMsg}
-        {time ? <strong>{time.tz().format("HH:mm")}</strong> : "resten av dagen"}
+        {props.time ? <strong>{props.time.tz().format("HH:mm")}</strong> : "resten av dagen"}
       </Card>
     </Link>
   );

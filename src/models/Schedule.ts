@@ -2,6 +2,7 @@ import dayjs from "dayjs";
 
 export class Schedule {
   constructor(
+    public name: string,
     public scheduleId: string,
     public availabilityView: string,
     public scheduleItems: ScheduleItem[],

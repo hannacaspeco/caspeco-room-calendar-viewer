@@ -1,6 +1,7 @@
 import dayjs from "dayjs";
 import { ISchedule, IScheduleItem, ITime, IWorkingHours } from "../models/IGetScheduleData";
 import { Schedule, ScheduleItem, Time, WorkingHours } from "../models/Schedule";
+import { allMeetingRooms } from "../services/calendarService";
 
 export const mapToSchedules = (schedules: ISchedule[], day: dayjs.Dayjs): Schedule[] => {
     return schedules.map((schedule) => mapToSchedule(schedule, day));
@@ -8,6 +9,7 @@ export const mapToSchedules = (schedules: ISchedule[], day: dayjs.Dayjs): Schedu
 
 export const mapToSchedule = (schedule: ISchedule, day: dayjs.Dayjs): Schedule => {
     return new Schedule(
+        allMeetingRooms.get(schedule.scheduleId) ?? schedule.scheduleId,
         schedule.scheduleId,
         schedule.availabilityView,
         mapToScheduleItems(schedule.scheduleItems),

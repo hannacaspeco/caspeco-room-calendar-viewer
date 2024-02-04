@@ -8,29 +8,31 @@ import {
   Container,
   Row,
   Image,
-  ButtonGroup,
   Modal,
   Spinner,
 } from "react-bootstrap";
-import { allMeetingRooms, getAllSchedules } from "../services/calendarService";
+import { getAllSchedules, getRoomStatus } from "../services/calendarService";
 import { useEffect, useState } from "react";
 import { MeetingRoomBlock } from "./MeetingRoomBlock";
 import { Schedule } from "../models/Schedule";
 import timezone from "dayjs/plugin/timezone";
 import utc from "dayjs/plugin/utc";
 import dayjs from "dayjs";
+import { BiSortAZ, BiSortDown } from "react-icons/bi";
+import { SortOrder } from "../models/SortOrder";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
 export const MeetingRooms = () => {
   const { instance, accounts } = useMsal();
-  const [calendarSchedules, setCalendarSchedules] = useState<Schedule[]>();
-  const [show, setShow] = useState(false);
+  const [schedules, setSchedules] = useState<Schedule[]>();
+  const [showModal, setShowModal] = useState(false);
+  const [sortOrder, setSortOrder] = useState<SortOrder>(SortOrder.availability);
 
   useEffect(() => {
-    async function getCalendarSchedules() {
-      if (calendarSchedules) {
+    async function effectAsync() {
+      if (schedules) {
         return;
       }
 
@@ -43,59 +45,99 @@ export const MeetingRooms = () => {
         })
         .then((response) => {
           getAllSchedules(response.accessToken).then((response) => {
-            setCalendarSchedules(response);
+            setSchedules(response);
           });
         })
         .catch((err) => {
           console.log("error: ", err);
         });
     }
-    getCalendarSchedules();
-  }, [accounts, calendarSchedules, instance]);
+    effectAsync();
+  }, [accounts, schedules, instance]);
+
+  const now = dayjs("2024-02-02");
+  const schedulesData = schedules?.map((schedule) => {
+    return {
+      schedule,
+      status: getRoomStatus(schedule.scheduleItems, now),
+    };
+  });
+
+  if (sortOrder === SortOrder.alphabetically) {
+    schedulesData?.sort((a, b) =>
+      a.schedule.name.localeCompare(b.schedule.name)
+    );
+  } else if (sortOrder === SortOrder.availability) {
+    schedulesData?.sort((a, b) => {
+      if (a.status[0] !== b.status[0]) {
+        return a.status[0] - b.status[0];
+      }
+      if (!a.status[1] && !b.status[1]) {
+        return a.schedule.name.localeCompare(b.schedule.name);
+      }
+      return (b.status[1] ?? dayjs()).diff(a.status[1]);
+    });
+  }
 
   return (
-    <Container style={{ maxWidth: "700px" }}>
+    <Container style={{ maxWidth: "600px" }}>
       <Row className="ps-2 pe-2">
         <Col className="text-end p-4">
-          <ButtonGroup>
-            <Button variant="secondary" onClick={() => setShow(true)}>
-              Visa karta över kontoret
-            </Button>
-            <SignOutButton />
-          </ButtonGroup>
+          <Button variant="secondary" onClick={() => setShowModal(true)}>
+            Visa karta över kontoret
+          </Button>
+          <SignOutButton />
         </Col>
       </Row>
 
-      <Modal show={show} fullscreen={true} onHide={() => setShow(false)}>
+      <Row className="p-1">
+        <Col className="text-start p-1 ps-4">
+          <Button
+            variant="secondary"
+            onClick={() => setSortOrder(SortOrder.alphabetically)}
+            active={sortOrder === SortOrder.alphabetically}
+          >
+            <BiSortAZ />
+          </Button>
+          <Button
+            variant="secondary"
+            onClick={() => setSortOrder(SortOrder.availability)}
+            active={sortOrder === SortOrder.availability}
+          >
+            <BiSortDown />
+          </Button>
+        </Col>
+      </Row>
+
+      <Modal
+        show={showModal}
+        fullscreen={true}
+        onHide={() => setShowModal(false)}
+      >
         <Modal.Header closeButton>
           <Modal.Title>Karta över kontoret</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Image
             src="/caspeco-room-calendar-viewer/karta_over_kontoret.png"
-            width={1200}
+            style={{ width: "100vw" }}
           />
         </Modal.Body>
       </Modal>
 
       <Row className="justify-content-md-center px-3">
         <Col>
-          {calendarSchedules ? (
+          {schedulesData ? (
             <>
-              {allMeetingRooms
-                .sort()
-                .map((roomMail, roomName) => {
-                  return (
-                    <MeetingRoomBlock
-                      name={roomName}
-                      mail={roomMail}
-                      schedule={calendarSchedules?.find(
-                        (s) => s.scheduleId === roomMail
-                      )}
-                    />
-                  );
-                })
-                .valueSeq()}
+              {schedulesData.map((data) => {
+                return (
+                  <MeetingRoomBlock
+                    schedule={data.schedule}
+                    status={data.status[0]}
+                    time={data.status[1]}
+                  />
+                );
+              })}
             </>
           ) : (
             <Spinner
