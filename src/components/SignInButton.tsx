@@ -1,6 +1,6 @@
 import { useMsal } from "@azure/msal-react";
 import { loginRequest } from "../authConfig.ts";
-import { Button } from "react-bootstrap";
+import { Button } from "../styles/styled-components/Button.tsx";
 
 export const SignInButton = () => {
   const { instance } = useMsal();
@@ -16,8 +16,8 @@ export const SignInButton = () => {
   };
 
   return (
-    <Button variant="primary" onClick={handleLogin}>
-      Logga in
-    </Button>
+    <Button $bgColor="#566bb3" $textColor="#f2f2f2" onClick={handleLogin}>
+    Logga in
+  </Button>
   );
 };

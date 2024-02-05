@@ -37,7 +37,7 @@ export const allMeetingRooms = Map<string, string>([
 export const getAllSchedules = async (
   accessToken: string
 ): Promise<Schedule[]> => {
-  const today = dayjs().date(2).hour(0).minute(0).second(0).millisecond(0);  
+  const today = dayjs().hour(0).minute(0).second(0).millisecond(0);  
 
   const requestData = {
     method: "POST",
@@ -73,7 +73,7 @@ export const getSchedule = async (
   accessToken: string,
   mail: string
 ): Promise<Schedule> => {
-  const today = dayjs().date(2).hour(0).minute(0).second(0).millisecond(0);  
+  const today = dayjs().hour(0).minute(0).second(0).millisecond(0);  
 
   const requestData = {
     method: "POST",

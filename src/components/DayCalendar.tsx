@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Calendar, DateLocalizer, dayjsLocalizer } from "react-big-calendar";
 import dayjs from "dayjs";
 import "react-big-calendar/lib/css/react-big-calendar.css";
@@ -61,7 +60,6 @@ export const DayCalendar = (props: IDayCalendarProps) => {
       events={events}
       startAccessor="start"
       endAccessor="end"
-      //style={{ padding: "20px" }}
     />
   );
 };

@@ -39,9 +39,3 @@ export class Time {
     public dateTime: dayjs.Dayjs
   ) {}
 }
-
-// class TimeZone {
-//   constructor(
-//     public name: string
-//   ) {}
-// }

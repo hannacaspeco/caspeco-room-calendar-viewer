@@ -1,4 +1,3 @@
-import "../styles/styles.scss";
 import { useMsal } from "@azure/msal-react";
 import { loginRequest } from "../authConfig";
 import { SignOutButton } from "./SignOutButton";
@@ -20,6 +19,7 @@ import utc from "dayjs/plugin/utc";
 import dayjs from "dayjs";
 import { BiSortAZ, BiSortDown } from "react-icons/bi";
 import { SortOrder } from "../models/SortOrder";
+import * as SC from "../styles/styled-components/Button";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -55,7 +55,7 @@ export const MeetingRooms = () => {
     effectAsync();
   }, [accounts, schedules, instance]);
 
-  const now = dayjs("2024-02-02");
+  const now = dayjs();
   const schedulesData = schedules?.map((schedule) => {
     return {
       schedule,
@@ -80,12 +80,10 @@ export const MeetingRooms = () => {
   }
 
   return (
-    <Container style={{ maxWidth: "600px" }}>
+    <Container className="custom-container">
       <Row className="ps-2 pe-2">
         <Col className="text-end p-4">
-          <Button variant="secondary" onClick={() => setShowModal(true)}>
-            Visa karta över kontoret
-          </Button>
+          <SC.Button $bgColor="#4472C4" $textColor="#F2F2F2" onClick={() => setShowModal(true)}>Visa karta över kontoret</SC.Button>
           <SignOutButton />
         </Col>
       </Row>
@@ -93,14 +91,14 @@ export const MeetingRooms = () => {
       <Row className="p-1">
         <Col className="text-start p-1 ps-4">
           <Button
-            variant="secondary"
+            variant="light"
             onClick={() => setSortOrder(SortOrder.alphabetically)}
             active={sortOrder === SortOrder.alphabetically}
           >
             <BiSortAZ />
           </Button>
           <Button
-            variant="secondary"
+            variant="light"
             onClick={() => setSortOrder(SortOrder.availability)}
             active={sortOrder === SortOrder.availability}
           >
@@ -120,7 +118,8 @@ export const MeetingRooms = () => {
         <Modal.Body>
           <Image
             src="/caspeco-room-calendar-viewer/karta_over_kontoret.png"
-            style={{ width: "100vw" }}
+            alt="karta över kontoret"
+            className="window-width"
           />
         </Modal.Body>
       </Modal>
@@ -143,12 +142,7 @@ export const MeetingRooms = () => {
             <Spinner
               animation="border"
               role="status"
-              className="p-4"
-              style={{
-                position: "fixed",
-                left: "45%",
-                top: "30%",
-              }}
+              className="p-4 spinner"
             >
               <span className="visually-hidden">Loading...</span>
             </Spinner>

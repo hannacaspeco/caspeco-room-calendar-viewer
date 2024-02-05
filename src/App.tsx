@@ -1,3 +1,4 @@
+import "./styles/styles.scss"
 import { Router } from "./Router";
 import { RouterProvider } from "react-router-dom";
 

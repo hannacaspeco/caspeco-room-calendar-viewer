@@ -1,5 +1,5 @@
 import { useMsal } from "@azure/msal-react";
-import { Button } from "react-bootstrap";
+import { Button } from "../styles/styled-components/Button";
 
 export const SignOutButton = () => {
   const { instance } = useMsal();
@@ -12,7 +12,7 @@ export const SignOutButton = () => {
   };
 
   return (
-    <Button variant="danger" onClick={handleLogout}>
+    <Button $bgColor="#c41b1b" $textColor="#f2f2f2" onClick={handleLogout}>
       Logga ut
     </Button>
   );
