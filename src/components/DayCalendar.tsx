@@ -1,6 +1,7 @@
 import { Calendar, DateLocalizer, dayjsLocalizer } from "react-big-calendar";
 import dayjs from "dayjs";
-import "react-big-calendar/lib/css/react-big-calendar.css";
+import "react-big-calendar/lib/sass/styles.scss";
+import "../styles/customCalendar.scss"
 import { ScheduleItem } from "../models/Schedule";
 
 const localizer = dayjsLocalizer(dayjs);
@@ -14,7 +15,7 @@ const formats = {
     if (!localizer) {
       return "error";
     }
-    
+
     return (
       localizer.format(range.start, "HH:mm") +
       " - " +
@@ -28,30 +29,21 @@ interface IDayCalendarProps {
   day: dayjs.Dayjs;
 }
 
-export const DayCalendar = (props: IDayCalendarProps) => {   
+export const DayCalendar = (props: IDayCalendarProps) => {
   const events = props.scheduleItems.map((i) => {
     return {
       start: i.start.dateTime.toDate(),
       end: i.end.dateTime.toDate(),
       title: i.subject,
     };
-  });  
+  });
 
   return (
     <Calendar
       culture="sv-SE"
       formats={formats}
-      min={
-        new Date(props.day.year(), props.day.month(), props.day.date(), 7)
-      }
-      max={
-        new Date(
-          props.day.year(),
-          props.day.month(),
-          props.day.date(),
-          21
-        )
-      }
+      min={new Date(props.day.year(), props.day.month(), props.day.date(), 7)}
+      max={new Date(props.day.year(), props.day.month(), props.day.date(), 21)}
       defaultDate={props.day.toDate()}
       defaultView="day"
       views={["day"]}
@@ -60,6 +52,9 @@ export const DayCalendar = (props: IDayCalendarProps) => {
       events={events}
       startAccessor="start"
       endAccessor="end"
+      style={{
+        height: "800px"
+      }}
     />
   );
 };

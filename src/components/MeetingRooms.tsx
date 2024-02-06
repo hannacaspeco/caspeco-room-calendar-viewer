@@ -20,6 +20,7 @@ import dayjs from "dayjs";
 import { BiSortAZ, BiSortDown } from "react-icons/bi";
 import { SortOrder } from "../models/SortOrder";
 import * as SC from "../styles/styled-components/Button";
+import { RoomStatus } from "../models/RoomStatus";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -74,6 +75,9 @@ export const MeetingRooms = () => {
       }
       if (!a.status[1] && !b.status[1]) {
         return a.schedule.name.localeCompare(b.schedule.name);
+      }
+      if (a.status[0] === RoomStatus.unavailable) {
+        return (a.status[1] ?? dayjs()).diff(b.status[1]);
       }
       return (b.status[1] ?? dayjs()).diff(a.status[1]);
     });

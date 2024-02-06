@@ -17,7 +17,7 @@ export const SignInButton = () => {
 
   return (
     <Button $bgColor="#566bb3" $textColor="#f2f2f2" onClick={handleLogin}>
-    Logga in
-  </Button>
+      Logga in
+    </Button>
   );
 };

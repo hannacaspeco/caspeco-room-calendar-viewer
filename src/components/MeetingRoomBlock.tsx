@@ -21,15 +21,15 @@ export const MeetingRoomBlock = (props: IMeetingRoomBlockProps) => {
 
   switch (props.status) {
     case RoomStatus.available:
-      avaliabilityBgColor = "linear-gradient(45deg,#17961b,#3cc740)";
+      avaliabilityBgColor = "linear-gradient(45deg,#3f705f,#66b397)";
       roomStatusMsg = "Ledig ";
       break;
     case RoomStatus.unavailable:
-      avaliabilityBgColor = "linear-gradient(45deg,#910106,#e0383e)";
+      avaliabilityBgColor = "linear-gradient(45deg,#871e36,#ba3c59)";
       roomStatusMsg = "Upptagen tills ";
       break;
     case RoomStatus.soonUnavailable:
-      avaliabilityBgColor = "linear-gradient(45deg,#db8202,#f5b65b)";
+      avaliabilityBgColor = "linear-gradient(45deg,#b5700d,#f5b65b)";
       roomStatusMsg = "Upptagen ";
       break;
     default:

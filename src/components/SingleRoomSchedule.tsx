@@ -47,7 +47,7 @@ export const SingleRoomSchedule = () => {
   }
 
   return (
-    <Container className="p-4">
+    <Container className="p-4 schedule-container">
       <Row className="ps-2 pe-2">
         <Col className="text-end p-4">
           <Link to={"/meetingrooms"}>
@@ -57,12 +57,11 @@ export const SingleRoomSchedule = () => {
         </Col>
       </Row>
 
-      <div className="text-center" style={{ color: "#4472C4" }}>
+      <div className="text-center">
         <H2>SCHEMA</H2>
         <H1>{data.state.name}</H1>
       </div>
       <P>{schedule.day.format("dddd D MMMM")}</P>
-      <hr />
       <div>
         <DayCalendar
           scheduleItems={schedule.scheduleItems}
