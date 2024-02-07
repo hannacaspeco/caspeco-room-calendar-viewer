@@ -22,7 +22,7 @@ export const H3 = styled.h3`
 
 export const P = styled.p<{ $textColor: string }>`
   font-family: "Inter", sans-serif;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 500;
   color: ${(props) => props.$textColor};
 `;

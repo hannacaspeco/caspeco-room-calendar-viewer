@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { H3, P } from "../styles/styled-components/Text";
+import { H2, P } from "../styles/styled-components/Text";
 import { Card } from "../styles/styled-components/Card";
 import { Schedule } from "../models/Schedule";
 import { RoomStatus } from "../models/RoomStatus";
@@ -45,7 +45,7 @@ export const MeetingRoomBlock = (props: IMeetingRoomBlockProps) => {
       style={{ textDecoration: "none" }}
     >
       <Card $inputColor={avaliabilityBgColor}>
-        <H3 className="card-title">{props.schedule.name}</H3>
+        <H2 className="card-title">{props.schedule.name}</H2>
         <P $textColor="#F2F2F2" className="card-content-status">
           {roomStatusMsg}
           {props.time ? (
@@ -54,19 +54,19 @@ export const MeetingRoomBlock = (props: IMeetingRoomBlockProps) => {
             "resten av dagen"
           )}
         </P>
-        <P $textColor="#F2F2F2" className="card-content-seats">
+        <p className="card-content-seats">
           {props.schedule.seats}{" "}
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="18"
+            width="30"
+            height="30"
             fill="currentColor"
             className="bi bi-person-standing"
-            viewBox="4 0 14 18"
+            viewBox="4 0 20 18"
           >
             <path d="M8 3a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3M6 6.75v8.5a.75.75 0 0 0 1.5 0V10.5a.5.5 0 0 1 1 0v4.75a.75.75 0 0 0 1.5 0v-8.5a.25.25 0 1 1 .5 0v2.5a.75.75 0 0 0 1.5 0V6.5a3 3 0 0 0-3-3H7a3 3 0 0 0-3 3v2.75a.75.75 0 0 0 1.5 0v-2.5a.25.25 0 0 1 .5 0" />
           </svg>
-        </P>
+        </p>
       </Card>
     </Link>
   );

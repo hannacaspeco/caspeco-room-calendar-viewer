@@ -52,9 +52,6 @@ export const DayCalendar = (props: IDayCalendarProps) => {
       events={events}
       startAccessor="start"
       endAccessor="end"
-      style={{
-        height: "800px"
-      }}
     />
   );
 };
