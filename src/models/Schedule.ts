@@ -4,6 +4,7 @@ export class Schedule {
   constructor(
     public name: string,
     public scheduleId: string,
+    public seats: number,
     public availabilityView: string,
     public scheduleItems: ScheduleItem[],
     public workingHours: WorkingHours | undefined,

@@ -2,15 +2,18 @@ import dayjs from "dayjs";
 import { ISchedule, IScheduleItem, ITime, IWorkingHours } from "../models/IGetScheduleData";
 import { Schedule, ScheduleItem, Time, WorkingHours } from "../models/Schedule";
 import { allMeetingRooms } from "../services/calendarService";
+import { MeetingRoom } from "../models/MeetingRoom";
 
 export const mapToSchedules = (schedules: ISchedule[], day: dayjs.Dayjs): Schedule[] => {
     return schedules.map((schedule) => mapToSchedule(schedule, day));
 }
 
 export const mapToSchedule = (schedule: ISchedule, day: dayjs.Dayjs): Schedule => {
+    const meetingRoom = allMeetingRooms.get(schedule.scheduleId) || new MeetingRoom("", 0)
     return new Schedule(
-        allMeetingRooms.get(schedule.scheduleId) ?? schedule.scheduleId,
+        meetingRoom.name,
         schedule.scheduleId,
+        meetingRoom.seats,
         schedule.availabilityView,
         mapToScheduleItems(schedule.scheduleItems),
         mapToWorkingHours(schedule.workingHours),

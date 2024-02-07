@@ -20,9 +20,9 @@ export const H3 = styled.h3`
   font-weight: 400;
 `;
 
-export const P = styled.p`
+export const P = styled.p<{ $textColor: string }>`
   font-family: "Inter", sans-serif;
   font-size: 16px;
   font-weight: 500;
-  color: #000;
+  color: ${(props) => props.$textColor};
 `;

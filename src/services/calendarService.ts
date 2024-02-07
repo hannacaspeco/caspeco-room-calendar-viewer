@@ -8,30 +8,31 @@ import dayjs from "dayjs";
 import { RoomStatus } from "../models/RoomStatus";
 import { Schedule, ScheduleItem } from "../models/Schedule";
 import { mapToSchedule, mapToSchedules } from "../mappers/scheduleMapper";
+import { MeetingRoom } from "../models/MeetingRoom";
 
 const BASE_URL = "https://graph.microsoft.com/v1.0";
 
-export const allMeetingRooms = Map<string, string>([
-  ["allrummet@caspeco.se", "Allrummet"],
-  ["room.alvamyrdal@caspeco.se", "Alva Myrdal"],
-  ["room.anderscelsius@caspeco.se", "Anders Celsius"],
-  ["annamarialenngren@caspeco.se", "Anna Maria Lenngren"],
-  ["room.armandduplantis@caspeco.se", "Anna Maria Lenngren"],
-  ["barbroalving@caspeco.se", "Barbro Alving"],
-  ["room.baren@caspeco.se", "Baren"],
-  ["brorhjorth@caspeco.se", "Bror Hjorth"],
-  ["room.brunoliljefors@caspeco.se", "Bruno Liljefors"],
-  ["carlvonlinne@caspeco.se", "Carl Von Linné"],
-  ["room.daghammarskjold@caspeco.se", "Dag Hammarskjöld"],
-  ["room.etype@caspeco.se", "E-type"],
-  ["room.gunnar.leche@caspeco.se", "Gunnar Leche"],
-  ["ingemarbergman@caspeco.se", "Ingemar Bergman"],
-  ["room.karinboye@caspeco.se", "Karin Boye"],
-  ["room.koket@caspeco.se", "Köket"],
-  ["room.magdalenaandersson@caspeco.se", "Magdalena Andersson"],
-  ["room.musikrummet@caspeco.se", "Musikrummet"],
-  ["owethornqvist@caspeco.se", "Owe Thörnqvist"],
-  ["veronicamaggio@caspeco.se", "Veronica Maggio"],
+export const allMeetingRooms = Map<string, MeetingRoom>([
+  ["allrummet@caspeco.se", new MeetingRoom("Allrummet", 30)],
+  ["room.alvamyrdal@caspeco.se", new MeetingRoom("Alva Myrdal", 10)],
+  ["room.anderscelsius@caspeco.se", new MeetingRoom("Anders Celsius", 5)],
+  ["annamarialenngren@caspeco.se", new MeetingRoom("Anna Maria Lenngren", 5)],
+  ["room.armandduplantis@caspeco.se", new MeetingRoom("Armand Duplantis", 4)],
+  ["barbroalving@caspeco.se", new MeetingRoom("Barbro Alving", 10)],
+  ["room.baren@caspeco.se", new MeetingRoom("Baren", 6)],
+  ["brorhjorth@caspeco.se", new MeetingRoom("Bror Hjorth", 4)],
+  ["room.brunoliljefors@caspeco.se", new MeetingRoom("Bruno Liljefors", 10)],
+  ["carlvonlinne@caspeco.se", new MeetingRoom("Carl Von Linné", 4)],
+  ["room.daghammarskjold@caspeco.se", new MeetingRoom("Dag Hammarskjöld", 10)],
+  ["room.etype@caspeco.se", new MeetingRoom("E-type", 8)],
+  ["room.gunnar.leche@caspeco.se", new MeetingRoom("Gunnar Leche", 6)],
+  ["ingemarbergman@caspeco.se", new MeetingRoom("Ingemar Bergman", 10)],
+  ["room.karinboye@caspeco.se", new MeetingRoom("Karin Boye", 6)],
+  ["room.koket@caspeco.se", new MeetingRoom("Köket", 0)],
+  ["room.magdalenaandersson@caspeco.se", new MeetingRoom("Magdalena Andersson", 4)],
+  ["room.musikrummet@caspeco.se", new MeetingRoom("Musikrummet", 0)],
+  ["owethornqvist@caspeco.se", new MeetingRoom("Owe Thörnqvist", 8)],
+  ["veronicamaggio@caspeco.se", new MeetingRoom("Veronica Maggio", 4)],
 ]);
 
 export const getAllSchedules = async (
@@ -47,7 +48,6 @@ export const getAllSchedules = async (
     },
     data: {
       schedules: [...allMeetingRooms.keys()],
-      // schedules: ["ingemarbergman@caspeco.se"],
       startTime: {
         dateTime: today.hour(6).format("YYYY-MM-DDTHH:mm:ss"),
         timeZone: "UTC",
