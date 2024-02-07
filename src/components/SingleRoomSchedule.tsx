@@ -61,7 +61,7 @@ export const SingleRoomSchedule = () => {
         <H2>SCHEMA</H2>
         <H1>{data.state.name}</H1>
       </div>
-      <P>{schedule.day.format("dddd D MMMM")}</P>
+      <P $textColor="#000">{schedule.day.format("dddd D MMMM")}</P>
       <div>
         <DayCalendar
           scheduleItems={schedule.scheduleItems}

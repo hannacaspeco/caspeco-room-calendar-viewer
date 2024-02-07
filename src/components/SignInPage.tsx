@@ -24,12 +24,12 @@ export const SignInPage = () => {
       <center>
         {!isAuthenticated ? (
           <>
-            <P>Logga in för att se mötesrum för Caspeco Uppsala</P>
+            <P $textColor="#000">Logga in för att se mötesrum för Caspeco Uppsala</P>
             <SignInButton />
           </>
         ) : (
           <>
-            <P>Du är inloggad!</P>
+            <P $textColor="#000">Du är inloggad!</P>
             <Link to={"/meetingrooms"}>
               <Button $bgColor="#4472C4" $textColor="#f2f2f2">
                 Gå till mötesrum
