@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { H2, P } from "../styles/styled-components/Text";
+import { H3, P } from "../styles/styled-components/Text";
 import { Card } from "../styles/styled-components/Card";
 import { Schedule } from "../models/Schedule";
 import { RoomStatus } from "../models/RoomStatus";
@@ -45,7 +45,7 @@ export const MeetingRoomBlock = (props: IMeetingRoomBlockProps) => {
       style={{ textDecoration: "none" }}
     >
       <Card $inputColor={avaliabilityBgColor}>
-        <H2 className="card-title">{props.schedule.name}</H2>
+        <H3 className="card-title">{props.schedule.name}</H3>
         <P $textColor="#F2F2F2" className="card-content-status">
           {roomStatusMsg}
           {props.time ? (
