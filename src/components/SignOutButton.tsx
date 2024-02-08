@@ -7,7 +7,7 @@ export const SignOutButton = () => {
   const handleLogout = () => {
     sessionStorage.removeItem("calendarData");
     instance.logoutRedirect({
-      postLogoutRedirectUri: "/",
+      postLogoutRedirectUri: "/caspeco-room-calendar-viewer",
     });
   };
 
