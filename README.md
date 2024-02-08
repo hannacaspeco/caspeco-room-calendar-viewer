@@ -19,7 +19,6 @@ Gå in på sidan och logga sedan in med din Caspeco-mail. Klicka dig sedan vidar
 * Styled components
 
 ## Screen shots
-![image](https://github.com/hannacaspeco/caspeco-room-calendar-viewer/assets/148750254/8eca4dbc-4c3f-4e9f-b51a-71b7e89eef90)
-![image](https://github.com/hannacaspeco/caspeco-room-calendar-viewer/assets/148750254/261b6c2b-5fb2-4c63-9fba-b85ccef1232b)
-![image](https://github.com/hannacaspeco/caspeco-room-calendar-viewer/assets/148750254/91f81362-9a22-4961-86c2-2bef2fcde90b)
-![image](https://github.com/hannacaspeco/caspeco-room-calendar-viewer/assets/148750254/9087e421-5d6d-45ca-b23e-dd3c00d42658)
+![image](https://github.com/hannacaspeco/caspeco-room-calendar-viewer/assets/148750254/62c1af28-4e5a-44c0-9215-db445f038013)
+![image](https://github.com/hannacaspeco/caspeco-room-calendar-viewer/assets/148750254/2159a6b8-cb0e-4deb-aebb-26e173ceaac0)
+![image](https://github.com/hannacaspeco/caspeco-room-calendar-viewer/assets/148750254/dc740f97-c698-4c44-8526-8bb116d3a243)
