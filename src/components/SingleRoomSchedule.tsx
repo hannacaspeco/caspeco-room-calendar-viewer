@@ -18,11 +18,11 @@ export const SingleRoomSchedule = () => {
   const isAuthenticated = useIsAuthenticated();
   const navigate = useNavigate();
 
-  if (!isAuthenticated) {
-    navigate("/")
-  }
-
   useEffect(() => {
+    if (!isAuthenticated) {
+      navigate("/")
+    }
+    
     async function effectAsync() {
       if (schedule) {
         return;

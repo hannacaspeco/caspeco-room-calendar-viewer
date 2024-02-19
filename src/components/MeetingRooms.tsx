@@ -34,11 +34,11 @@ export const MeetingRooms = () => {
   const isAuthenticated = useIsAuthenticated();
   const navigate = useNavigate();
 
-  if (!isAuthenticated) {
-    navigate("/")
-  }
-
   useEffect(() => {
+    if (!isAuthenticated) {
+      navigate("/")
+    }
+    
     async function effectAsync() {
       if (schedules) {
         return;
