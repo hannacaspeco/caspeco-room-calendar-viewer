@@ -1,4 +1,4 @@
-import { useIsAuthenticated, useMsal } from "@azure/msal-react";
+import { useMsal } from "@azure/msal-react";
 import { loginRequest } from "../authConfig";
 import { SignOutButton } from "./SignOutButton";
 import {
@@ -31,14 +31,9 @@ export const MeetingRooms = () => {
   const [schedules, setSchedules] = useState<Schedule[]>();
   const [showModal, setShowModal] = useState(false);
   const [sortOrder, setSortOrder] = useState<SortOrder>(SortOrder.availability);
-  const isAuthenticated = useIsAuthenticated();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!isAuthenticated) {
-      navigate("/")
-    }
-    
+  useEffect(() => {    
     async function effectAsync() {
       if (schedules) {
         return;
@@ -58,16 +53,19 @@ export const MeetingRooms = () => {
         })
         .catch((err) => {
           console.log("error: ", err);
+          navigate("/");
         });
     }
     effectAsync();
-  }, [accounts, schedules, instance]);
+  }, [accounts, schedules, instance, navigate]);
 
   const now = dayjs();
   const schedulesData = schedules?.map((schedule) => {
+    const [status, meeting] = getRoomStatus(schedule.scheduleItems, now);
     return {
       schedule,
-      status: getRoomStatus(schedule.scheduleItems, now),
+      status,
+      meeting
     };
   });
 
@@ -77,16 +75,16 @@ export const MeetingRooms = () => {
     );
   } else if (sortOrder === SortOrder.availability) {
     schedulesData?.sort((a, b) => {
-      if (a.status[0] !== b.status[0]) {
-        return a.status[0] - b.status[0];
+      if (a.status !== b.status) {
+        return a.status - b.status;
       }
-      if (!a.status[1] && !b.status[1]) {
+      if (!a.meeting && !b.meeting) {
         return a.schedule.name.localeCompare(b.schedule.name);
       }
-      if (a.status[0] === RoomStatus.unavailable) {
-        return (a.status[1] ?? dayjs()).diff(b.status[1]);
+      if (a.status === RoomStatus.unavailable) {
+        return (a.meeting?.end.dateTime ?? dayjs()).diff(b.meeting?.end.dateTime);
       }
-      return (b.status[1] ?? dayjs()).diff(a.status[1]);
+      return (b.meeting?.start.dateTime ?? dayjs()).diff(a.meeting?.start.dateTime);
     });
   }
 
@@ -143,8 +141,8 @@ export const MeetingRooms = () => {
                 return (
                   <MeetingRoomBlock
                     schedule={data.schedule}
-                    status={data.status[0]}
-                    time={data.status[1]}
+                    status={data.status}
+                    meeting={data.meeting}
                   />
                 );
               })}

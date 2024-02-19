@@ -12,7 +12,8 @@ export const SignInPage = () => {
   const navigate = useNavigate();
 
   if (isAuthenticated) {
-    navigate("/meetingrooms")
+    navigate("/meetingrooms");
+    return;
   }
 
   return (

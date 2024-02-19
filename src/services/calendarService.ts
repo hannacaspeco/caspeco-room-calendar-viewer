@@ -107,7 +107,7 @@ export const getSchedule = async (
 export const getRoomStatus = (
   scheduleItems: ScheduleItem[] | undefined,
   currentTime: dayjs.Dayjs
-): [status: RoomStatus, time: dayjs.Dayjs | undefined] => {
+): [status: RoomStatus, meeting: ScheduleItem | undefined] => {
   if (!scheduleItems || scheduleItems.length === 0) {
     return [RoomStatus.available, undefined];
   }
@@ -119,7 +119,7 @@ export const getRoomStatus = (
   );
 
   if (meetingInProgress) {
-    return [RoomStatus.unavailable, meetingInProgress.end.dateTime];
+    return [RoomStatus.unavailable, meetingInProgress];
   }
 
   const nextMeeting = scheduleItems.find(
@@ -127,7 +127,7 @@ export const getRoomStatus = (
   );
 
   if (nextMeeting) {   
-    return [RoomStatus.soonUnavailable, nextMeeting.start.dateTime];
+    return [RoomStatus.soonUnavailable, nextMeeting];
   }
 
   return [RoomStatus.available, undefined];

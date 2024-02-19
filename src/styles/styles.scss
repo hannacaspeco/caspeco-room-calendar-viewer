@@ -39,9 +39,14 @@
   text-align: start;
 }
 
-.card-content-seats {
-  text-align: end;
-  color: #000 !important;
-  font-size: 25px;
-  font-weight: 500;
+.card-content-info {
+  display: flex;
+  justify-content: space-between;
+
+  .card-content-seats {
+    text-align: end;
+    color: #000 !important;
+    font-size: 25px;
+    font-weight: 500;
+  }
 }
