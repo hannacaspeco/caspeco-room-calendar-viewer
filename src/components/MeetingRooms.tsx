@@ -1,4 +1,4 @@
-import { useMsal } from "@azure/msal-react";
+import { useIsAuthenticated, useMsal } from "@azure/msal-react";
 import { loginRequest } from "../authConfig";
 import { SignOutButton } from "./SignOutButton";
 import {
@@ -21,6 +21,7 @@ import { BiSortAZ, BiSortDown } from "react-icons/bi";
 import { SortOrder } from "../models/SortOrder";
 import * as SC from "../styles/styled-components/Button";
 import { RoomStatus } from "../models/RoomStatus";
+import { useNavigate } from "react-router";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -30,6 +31,12 @@ export const MeetingRooms = () => {
   const [schedules, setSchedules] = useState<Schedule[]>();
   const [showModal, setShowModal] = useState(false);
   const [sortOrder, setSortOrder] = useState<SortOrder>(SortOrder.availability);
+  const isAuthenticated = useIsAuthenticated();
+  const navigate = useNavigate();
+
+  if (!isAuthenticated) {
+    navigate("/")
+  }
 
   useEffect(() => {
     async function effectAsync() {

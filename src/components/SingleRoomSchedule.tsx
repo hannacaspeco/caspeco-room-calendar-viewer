@@ -1,6 +1,6 @@
-import { useLocation } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import { H1, H2, P } from "../styles/styled-components/Text";
-import { useMsal } from "@azure/msal-react";
+import { useIsAuthenticated, useMsal } from "@azure/msal-react";
 import { useState, useEffect } from "react";
 import { loginRequest } from "../authConfig";
 import { getSchedule } from "../services/calendarService";
@@ -15,6 +15,12 @@ export const SingleRoomSchedule = () => {
   const [schedule, setSchedule] = useState<Schedule>();
   const data = useLocation();
   const { instance, accounts } = useMsal();
+  const isAuthenticated = useIsAuthenticated();
+  const navigate = useNavigate();
+
+  if (!isAuthenticated) {
+    navigate("/")
+  }
 
   useEffect(() => {
     async function effectAsync() {
